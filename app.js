@@ -1,12 +1,17 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable indent */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-unused-vars */
 /* eslint-disable new-cap */
 'use strict';
 
-
+let names=[];
+let vote=[];
+let show=[];
 let maximumClicks = 25;
 let attempts = 0;
-
+let src=[];
 let img1_element = document.getElementById('img_1');
 let img2_element = document.getElementById('img_2');
 let img3_element = document.getElementById('img_3');
@@ -53,11 +58,15 @@ function renderTreeRandomImages(){
   img1 = generateRandomIndex();
   img2 = generateRandomIndex();
   img3=generateRandomIndex();
-
+// src.push(img1,img2,img3);
+// console.log(src);
   while(img1 === img2 ||img1===img3||img3===img2){
     img1 = generateRandomIndex();
     img2=generateRandomIndex();
   }
+src[0]=img1;
+src[1]=img2;
+src[2]=img3;
 
 
 
@@ -78,7 +87,12 @@ function generateRandomIndex(){
   //floor (5.99999) =>   5
   // 0.55555
   let randomIndex = Math.floor(Math.random() * arrOfObjects.length);
-  return randomIndex;
+  while(src.includes(randomIndex)){
+    randomIndex = Math.floor(Math.random() * arrOfObjects.length);
+  }
+
+return randomIndex;
+  
 }
 
 
@@ -114,8 +128,16 @@ function handleClicking(event){
     renderTreeRandomImages();
     console.log(arrOfObjects);
   }else{
+    for(let i=0;i<arrOfObjects.length;i++){
+      names.push(arrOfObjects[i].name);
+      vote.push(arrOfObjects[i].votes);
+      show.push(arrOfObjects[i].showen);
+
+
+    }
     unorderdList.addEventListener('click',showResult);
     function showResult(event){
+
       let li;
       for(let i = 0 ; i < arrOfObjects.length; i++){
         li = document.createElement('li');
@@ -124,6 +146,7 @@ function handleClicking(event){
         //cursin goat it has
         li.textContent = `${arrOfObjects[i].name} it has ${arrOfObjects[i].votes} Votes.  and it has  Showen :${arrOfObjects[i].showen} tims `;}
       unorderdList.removeEventListener('click',showResult);
+      chartJs();
     }
 
     img1_element.removeEventListener('click', handleClicking);
@@ -138,6 +161,36 @@ let submit=document.createElement('button');
 let unorderdList = document.getElementById('unList');
 unorderdList.appendChild(submit);
 submit.textContent='Show The Result';
+
+function chartJs(){
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'bar',
+  
+      // The data for our dataset
+      data: {
+          labels:names,
+          datasets: [{
+              label: 'votes',
+              backgroundColor: '#C34C31',
+              borderColor: 'white',
+              data: vote,
+          },{ label: 'show',
+          backgroundColor: '#9EC331',
+          borderColor: 'rgb(255, 99, 132)',
+          data: show,}
+        ]
+      },
+  
+      // Configuration options go here
+      options: {}
+  });
+
+
+
+}
 
 
 
