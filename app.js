@@ -75,7 +75,6 @@ src[2]=img3;
   img3_element.setAttribute('src', arrOfObjects[img3].source);
 
 
-
 }
 
 renderTreeRandomImages();
@@ -100,12 +99,15 @@ img1_element.addEventListener('click', handleClicking);
 img2_element.addEventListener('click', handleClicking);
 img3_element.addEventListener('click', handleClicking);
 
+
 // id from the image
 function handleClicking(event){
   attempts++;
   // console.log(event);
   //Limiting The user;
   // 10  === 10;
+  
+  
   if(attempts <= maximumClicks){
     if(event.target.id === 'img_1'){
       arrOfObjects[img1].votes++;
@@ -113,7 +115,7 @@ function handleClicking(event){
       arrOfObjects[img2].showen++;
       arrOfObjects[img3].showen++;
 
-      // console.log(arrOfObjects[leftImageIndex].votes);
+      
     }else if(event.target.id === 'img_2'){
       arrOfObjects[img2].votes++;
       arrOfObjects[img2].showen++;
@@ -125,7 +127,9 @@ function handleClicking(event){
       arrOfObjects[img1].showen++;
       arrOfObjects[img2].showen++;
     }
+    saveImage();
     renderTreeRandomImages();
+
     console.log(arrOfObjects);
   }else{
     for(let i=0;i<arrOfObjects.length;i++){
@@ -137,7 +141,15 @@ function handleClicking(event){
     }
     unorderdList.addEventListener('click',showResult);
     function showResult(event){
-
+      if(attempts===0){
+        let li;
+        for(let i = 0 ; i < list.length; i++){
+          li = document.createElement('li');
+          unorderdList.appendChild(li);
+          // [0]
+          //cursin goat it has
+          li.textContent = `${list[i].name} it has ${list[i].votes} Votes.  and it has  Showen :${list[i].showen} tims `;}
+      }
       let li;
       for(let i = 0 ; i < arrOfObjects.length; i++){
         li = document.createElement('li');
@@ -147,6 +159,7 @@ function handleClicking(event){
         li.textContent = `${arrOfObjects[i].name} it has ${arrOfObjects[i].votes} Votes.  and it has  Showen :${arrOfObjects[i].showen} tims `;}
       unorderdList.removeEventListener('click',showResult);
       chartJs();
+     // gitTmage();
     }
 
     img1_element.removeEventListener('click', handleClicking);
@@ -191,6 +204,34 @@ function chartJs(){
 
 
 }
+
+function saveImage(){
+  let img=JSON.stringify(arrOfObjects);
+  localStorage.setItem('allimages',img);
+  console.log('inside saveImage');
+}
+
+let list;
+function gitTmage(){
+  let getImage=localStorage.getItem('allimages');
+   list=JSON.parse(getImage);
+  
+  console.log('inside getimage');
+  if(list){
+    arrOfObjects=list;
+
+
+  }
+
+  
+ 
+}
+gitTmage();
+
+
+
+
+
 
 
 
